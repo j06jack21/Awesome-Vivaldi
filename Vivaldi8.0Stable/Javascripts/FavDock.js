@@ -794,10 +794,9 @@
         // Vivaldi may not pin cross-type drops by itself
         await updateTab(sourceId, { pinned: true });
       }
-      if (intoFavZone) await markFavorite(sourceId);
-      else await unmarkFavorite(sourceId);
-      const idx = Math.min(insertIdx, CONFIG.maxFavorites - 1);
-      await moveTab(sourceId, intoFavZone ? idx : insertIdx);
+      await unmarkFavorite(sourceId);
+      const favCount = state.favorites.filter((f) => f.tabId !== sourceId).length;
+      await moveTab(sourceId, Math.max(insertIdx, favCount));
     } else {
       // Dragged into the normal zone → ensure unpinned + unmarked
       await unmarkFavorite(sourceId);
